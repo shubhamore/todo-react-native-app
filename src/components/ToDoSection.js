@@ -22,11 +22,11 @@ const ToDoSection = () => {
         );
     };
 
-    const onToggle=(id,comp)=>{
+    const onToggle = (id, comp) => {
         dispatch(
             toggleTask({
-                id:id,
-                comp:comp
+                id: id,
+                comp: comp
             })
         )
     }
@@ -39,23 +39,17 @@ const ToDoSection = () => {
             </View>
 
             <View style={styles.goalsContainer}>
-                <FlatList
-                    data={todos}
-                    renderItem={(itemData) => {
-                        return (
-                            <ToDoItem
-                                name={itemData.item.name}
-                                id={itemData.item.id}
-                                // onDeleteItem={onDelete}
-                                toggle={()=>onToggle(itemData.item.id,itemData.item.completed)}
-                                completed={itemData.item.completed}
-                            />
-                        );
-                    }}
-                    keyExtractor={(item, index) => {
-                        return item.id;
-                    }}
-                />
+                {todos.map(itemData => {
+                    return (
+                        <ToDoItem
+                            name={itemData.name}
+                            id={itemData.id}
+                            key={itemData.id}
+                            toggle={() => onToggle(itemData.id, itemData.completed)}
+                            completed={itemData.completed}
+                        />
+                    );
+                })}
             </View>
 
             <View style={styles.todoItem}>
