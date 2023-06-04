@@ -24,6 +24,7 @@ function ToDoInput(props) {
     }
 
     return (
+        // shows modal when user wants to input a task
         <Modal visible={props.visible} transparent={true} animationType="slide">
             <View style={styles.inputContainer}>
                 <Icon name='circle-with-cross' size={45} color={'red'} style={{ position: 'absolute', top: 20, left: 20 }} onPress={props.close} />
@@ -60,9 +61,9 @@ const styles = StyleSheet.create({
         borderColor: '#cccccc',
         width: '100%',
         padding: 8,
-        backgroundColor:'#fff',
-        paddingHorizontal:20,
-        fontWeight:'bold',
-        fontSize:20
+        backgroundColor: '#fff',
+        paddingHorizontal: 20,
+        fontWeight: 'bold',
+        fontSize: 20
     },
 });

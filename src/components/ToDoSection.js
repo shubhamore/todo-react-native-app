@@ -13,15 +13,12 @@ import { useDispatch } from "react-redux";
 const ToDoSection = () => {
     const dispatch = useDispatch();
     const todos = useSelector((state) => state.tasks);
-
     const [modalIsVisible, setModalIsVisible] = useState(false);
-
     const onDelete = () => {
         dispatch(
             deleteTask({})
         );
-    };
-
+    }
     const onToggle = (id, comp) => {
         dispatch(
             toggleTask({
@@ -33,11 +30,13 @@ const ToDoSection = () => {
 
     return (
         <View>
+            {/* display delete button to delete all tasks */}
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={styles.subheading}>Task List</Text>
                 <Icon name="delete" color='#ff0000' size={30} style={styles.icon} onPress={onDelete} />
             </View>
 
+            {/* show all existing tasks */}
             <View style={styles.goalsContainer}>
                 {todos.map(itemData => {
                     return (
@@ -52,6 +51,7 @@ const ToDoSection = () => {
                 })}
             </View>
 
+            {/* Add task button */}
             <View style={styles.todoItem}>
                 <Pressable
                     android_ripple={{ color: '#D7D7D7' }}
@@ -65,6 +65,7 @@ const ToDoSection = () => {
                 </Pressable>
             </View>
 
+            {/* show modal when task to be added */}
             <ToDoInput
                 visible={modalIsVisible}
                 close={() => setModalIsVisible(false)}
@@ -98,6 +99,5 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontWeight: 500,
         lineHeight: 24,
-        // overflow:'auto'
     },
 })
