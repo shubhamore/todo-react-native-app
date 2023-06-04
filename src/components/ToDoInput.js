@@ -2,38 +2,47 @@ import { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Modal } from 'react-native';
 import Icon from 'react-native-vector-icons/Entypo';
 
-function GoalInput(props) {
+import { useDispatch } from "react-redux";
+import { addTask } from "../redux/taskSlice";
+
+function ToDoInput(props) {
+    const dispatch = useDispatch();
     const [text, setText] = useState('');
 
-    function goalInputHandler(enteredText) {
-        setText(enteredText);
-    }
+    const onSubmitTask = () => {
+        dispatch(
+            addTask({
+                task: text,
+            })
+        );
+        setText("");
+        props.close()
+    };
 
-    function addGoalHandler() {
-        props.onAddGoal(text);
-        setText('');
+    function todoInputHandler(enteredText) {
+        setText(enteredText);
     }
 
     return (
         <Modal visible={props.visible} transparent={true} animationType="slide">
             <View style={styles.inputContainer}>
-                <Icon name='circle-with-cross' size={45} color={'red'} style={{ position: 'absolute', top: 20, left: 20 }} onPress={props.onCancel} />
+                <Icon name='circle-with-cross' size={45} color={'red'} style={{ position: 'absolute', top: 20, left: 20 }} onPress={props.close} />
                 <TextInput
                     multiline={true}
                     style={styles.textInput}
                     placeholder="Your Task"
-                    onChangeText={goalInputHandler}
+                    onChangeText={todoInputHandler}
                     value={text}
                 />
                 <View style={{ width: '100%', marginTop: 15 }}>
-                    <Button title="Add Task" onPress={addGoalHandler} color={"#7F56D9"} />
+                    <Button title="Add Task" onPress={onSubmitTask} color={"#7F56D9"} />
                 </View>
             </View>
         </Modal>
     );
 }
 
-export default GoalInput;
+export default ToDoInput;
 
 const styles = StyleSheet.create({
     inputContainer: {

@@ -3,16 +3,18 @@ import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 function ToDoItem(props) {
+  // console.log("props recieved=",props)
   return (
     <View style={styles.todoItem}>
       <Pressable
         android_ripple={{ color: '#D7D7D7' }}
         // onPress={(props.onDeleteItem.bind(this, props.id))}
+        onPress={props.toggle}
         style={({ pressed }) => pressed && styles.pressedItem}
       >
       <View style={{flexDirection:'row',alignItems:'center',paddingLeft:20}}>
         {props.completed?<FontAwesome size={30} color={'#7F56D9'} name='check-circle'/>:<Entypo size={25} color={'grey'} name='circle'/>}
-        <Text style={styles.todoText}>{props.text}</Text>
+        <Text style={styles.todoText}>{props.name}</Text>
       </View>
       </Pressable>
     </View>

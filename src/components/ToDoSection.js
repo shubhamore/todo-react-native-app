@@ -1,50 +1,53 @@
-import { StyleSheet, Text, View, Dimensions, Button, FlatList,Pressable } from 'react-native'
+import { StyleSheet, Text, View, Dimensions, Button, FlatList, Pressable } from 'react-native'
 import React, { useState } from 'react'
 const { width } = Dimensions.get('window')
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Feather from 'react-native-vector-icons/Feather';
 import ToDoInput from './ToDoInput'
 import ToDoItem from './ToDoItem';
+import { useSelector } from "react-redux";
+import { deleteTask } from "../redux/taskSlice";
+import { toggleTask } from "../redux/taskSlice";
+import { useDispatch } from "react-redux";
 
 const ToDoSection = () => {
-    const [modalIsVisible, setModalIsVisible] = useState(false);
-    const [courseGoals, setCourseGoals] = useState([]);
+    const dispatch = useDispatch();
+    const todos = useSelector((state) => state.tasks);
 
-    function endAddGoalHandler() {
-        setModalIsVisible(false);
-    }
-    function startAddGoalHandler() {
-        setModalIsVisible(true);
-    }
-    function addGoalHandler(enteredGoalText) {
-        setCourseGoals((currentCourseGoals) => [
-            ...currentCourseGoals,
-            { text: enteredGoalText, id: (Date.now()+Math.random()).toString(), completed: false },
-        ]);
-        endAddGoalHandler();
-    }
-    function deleteGoalHandler(id) {
-        setCourseGoals((currentCourseGoals) => {
-            return currentCourseGoals.filter((goal) => goal.id !== id);
-        });
+    const [modalIsVisible, setModalIsVisible] = useState(false);
+
+    const onDelete = () => {
+        dispatch(
+            deleteTask({})
+        );
+    };
+
+    const onToggle=(id,comp)=>{
+        dispatch(
+            toggleTask({
+                id:id,
+                comp:comp
+            })
+        )
     }
 
     return (
         <View>
             <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                 <Text style={styles.subheading}>Task List</Text>
-                <Icon name="delete" color='#ff0000' size={30} style={styles.icon} onPress={() => console.log("delete pressed")} />
+                <Icon name="delete" color='#ff0000' size={30} style={styles.icon} onPress={onDelete} />
             </View>
 
             <View style={styles.goalsContainer}>
                 <FlatList
-                    data={courseGoals}
+                    data={todos}
                     renderItem={(itemData) => {
                         return (
                             <ToDoItem
-                                text={itemData.item.text}
+                                name={itemData.item.name}
                                 id={itemData.item.id}
-                                onDeleteItem={deleteGoalHandler}
+                                // onDeleteItem={onDelete}
+                                toggle={()=>onToggle(itemData.item.id,itemData.item.completed)}
                                 completed={itemData.item.completed}
                             />
                         );
@@ -58,11 +61,11 @@ const ToDoSection = () => {
             <View style={styles.todoItem}>
                 <Pressable
                     android_ripple={{ color: '#D7D7D7' }}
-                    onPress={startAddGoalHandler}
+                    onPress={() => setModalIsVisible(true)}
                     style={({ pressed }) => pressed && styles.pressedItem}
                 >
                     <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 20 }}>
-                        <Feather name="plus" size={25} color={'#ABB6C8'}/>
+                        <Feather name="plus" size={25} color={'#ABB6C8'} />
                         <Text style={styles.todoText}>Add Task</Text>
                     </View>
                 </Pressable>
@@ -70,8 +73,7 @@ const ToDoSection = () => {
 
             <ToDoInput
                 visible={modalIsVisible}
-                onAddGoal={addGoalHandler}
-                onCancel={endAddGoalHandler}
+                close={() => setModalIsVisible(false)}
             />
         </View>
     )
@@ -91,17 +93,17 @@ const styles = StyleSheet.create({
         marginVertical: 8,
         borderRadius: 16,
         backgroundColor: '#F9F9FB',
-      },
-      pressedItem: {
+    },
+    pressedItem: {
         opacity: 0.75,
-      },
-      todoText: {
-        color:'#ABB6C8',
-        paddingVertical:25.5,
-        paddingHorizontal:20.5,
-        fontSize:16,
-        fontWeight:500,
-        lineHeight:24,
+    },
+    todoText: {
+        color: '#ABB6C8',
+        paddingVertical: 25.5,
+        paddingHorizontal: 20.5,
+        fontSize: 16,
+        fontWeight: 500,
+        lineHeight: 24,
         // overflow:'auto'
-      },
+    },
 })
